@@ -1,0 +1,84 @@
+ENGINE INT CACHE SET ON
+SET PAGE-NUM=NOLEAD
+SET SQUEEZE=ON
+-DEFAULTH &WF_HTMLENCODE=ON;
+SET HTMLENCODE=&WF_HTMLENCODE
+
+SET HTMLCSS=ON
+-DEFAULTH &WF_EMPTYREPORT=ON;
+SET EMPTYREPORT=&WF_EMPTYREPORT
+
+SET EMBEDHEADING=ON
+SET GRAPHDEFAULT=OFF
+
+EMBED BEGIN PCHOLD FORMAT JSCHART
+EMBED COMPONENT AS TableChart_2
+GRAPH FILE retail_samples/wf_retail_lite
+-* Created by Designer for Graph
+SUM WF_RETAIL_LITE.WF_RETAIL_SALES.REVENUE_US
+BY WF_RETAIL_LITE.WF_RETAIL_GEOGRAPHY_STORE.COUNTRY_NAME
+ON GRAPH PCHOLD FORMAT JSCHART
+ON GRAPH SET VZERO OFF
+ON GRAPH SET HAXIS 770.0
+ON GRAPH SET VAXIS 405.0
+ON GRAPH SET LOOKGRAPH CHOROPLETH
+ON GRAPH SET EMBEDHEADING ON
+ON GRAPH SET STYLE *
+INCLUDE=IBFS:/WFC/Global/Themes/Standard/Default/theme.sty,$
+TYPE=REPORT, ARREPORTSIZE=DIMENSION, ARFILTER_TARGET='*', CHART-LOOK=com.ibi.geo.layer, $
+TYPE=DATA, COLUMN=N2, BUCKET=color, $
+*GRAPH_SCRIPT
+
+*GRAPH_JS_FINAL
+"extensions": {
+    "com.ibi.geo.layer": {
+        "overlayLayers":             [
+                {
+                    "ibiDataLayer": {
+                        "map-metadata": {
+                            "map_by_field": "WF_RETAIL_LITE.WF_RETAIL_GEOGRAPHY_STORE.COUNTRY_NAME"
+                        }
+                    }
+                }
+            ],
+        "title": "Data Layer 1"
+    }
+}
+
+*END
+ENDSTYLE
+END
+EMBED MAIN
+
+GRAPH FILE SYSCOLUM
+-* Created by Designer for Graph
+SUM CNT.TBNAME
+IF READLIMIT EQ 1
+ON GRAPH PCHOLD FORMAT JSCHART
+ON GRAPH SET VZERO OFF
+ON GRAPH SET LOOKGRAPH BUBBLEMAP
+ON GRAPH SET AUTOFIT ON
+ON GRAPH SET STYLE *
+INCLUDE=IBFS:/WFC/Global/Themes/Standard/Default/theme.sty,$
+TYPE=REPORT, ARREPORTSIZE=DIMENSION, ARFILTER_TARGET='*', CHART-LOOK=com.ibi.geo.map, ARGRAPHENGINE=JSCHART, $
+TYPE=DATA, COLUMN=N1, BUCKET=NULL, $;
+*GRAPH_SCRIPT
+*GRAPH_JS_FINAL
+"extensions": {
+    "com.ibi.geo.map": {
+        "baseMapInfo": {
+            "customBaseMaps":                 [
+                    {
+                        "ibiBaseLayer": "gray-vector"
+                    }
+                ]
+        }
+    }
+}
+
+*END
+ENDSTYLE
+END
+EMBED END
+
+
