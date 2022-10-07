@@ -2,4 +2,5 @@ TABLE FILE CAR
 PRINT COUNTRY
 HEADING
 "testing headings"
+"testing headings2"
 END
